@@ -33,9 +33,11 @@
     // "noPropertyAccessFromIndexSignature": true,
 
     // Recommended Options
+    "esModuleInterop": true,
+    "moduleResolution": "node",
     "strict": true,
     "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
+    // "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
