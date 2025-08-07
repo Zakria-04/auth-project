@@ -1,6 +1,7 @@
 import { model, Schema } from "mongoose";
 
 interface Auth {
+  username: string;
   email: string;
   password?: string;
   authProvider: "google" | "email";
@@ -9,6 +10,12 @@ interface Auth {
 
 const authSchema = new Schema<Auth>(
   {
+    username: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: [3, "Username must be at least 3 characters long"],
+    },
     email: {
       type: String,
       required: true,
@@ -37,6 +44,6 @@ const authSchema = new Schema<Auth>(
   { timestamps: true }
 );
 
-const AUTH_MODEL = model<Auth>("Auth", authSchema);
+const AUTH_MODEL = model<Auth>("user", authSchema);
 
 export default AUTH_MODEL;
