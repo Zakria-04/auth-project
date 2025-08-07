@@ -17,7 +17,7 @@ export const generateAccessToken = (payload: object) => {
 
 export const generateRefreshToken = (payload: object) => {
   return jwt.sign(payload, refreshSecret, {
-    expiresIn: "7d",
+    expiresIn: "1d",
   });
 };
 

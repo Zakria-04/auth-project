@@ -67,4 +67,57 @@ const createNewUser = async (req: Request, res: Response) => {
   }
 };
 
-export { createNewUser };
+const loginUser = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+
+    // check if email and password are provided
+    if (!email || !password) {
+      res.status(400).json({
+        message: "Email and password are required.",
+      });
+      return;
+    }
+
+    // find user by email
+    const user = await AUTH_MODEL.findOne({ email });
+    if (!user) {
+      res.status(400).json({
+        message: "User not found with this email.",
+      });
+      return;
+    }
+
+    // check if password is correct
+    const isPasswordValid = await bcrypt.compare(password, user.password!);
+    if (!isPasswordValid) {
+      res.status(400).json({
+        message: "Invalid password.",
+      });
+      return;
+    }
+
+    // create tokens
+    const payload = { username: user.username, email: user.email };
+    const accessToken = generateAccessToken(payload);
+    const refreshToken = generateRefreshToken(payload);
+
+    // update user refresh token
+    user.refreshToken = refreshToken;
+    await user.save();
+
+    return res.status(200).json({
+      message: "Login successful.",
+      accessToken,
+      refreshToken,
+      user: {
+        username: user.username,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    serverError(res, error);
+  }
+};
+
+export { createNewUser, loginUser };
