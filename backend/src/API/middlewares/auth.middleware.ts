@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { verifyAccessToken } from "../../utils/jwt";
 
 interface UserPayload {
-  id: string;
+  _id: string;
   email: string;
   username: string;
 }
@@ -37,3 +37,4 @@ export const authenticateToken = (
     return;
   }
 };
+

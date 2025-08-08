@@ -2,7 +2,11 @@ import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import AUTH_MODEL from "../Models/user.model";
 import { serverError } from "../../utils/serverError";
-import { generateAccessToken, generateRefreshToken } from "../../utils/jwt";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  verifyRefreshToken,
+} from "../../utils/jwt";
 
 const createNewUser = async (req: Request, res: Response) => {
   try {
@@ -113,7 +117,7 @@ const loginUser = async (req: Request, res: Response) => {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: "strict",
+      sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000,
     });
 
@@ -136,4 +140,41 @@ const loginUser = async (req: Request, res: Response) => {
   }
 };
 
-export { createNewUser, loginUser };
+const refreshTokenController = async (req: Request, res: Response) => {
+  const refreshToken = req.cookies.refreshToken;
+
+  if (!refreshToken) {
+    return res.status(401).json({ message: "Refresh token missing" });
+  }
+
+  try {
+    const payload = verifyRefreshToken(refreshToken);
+
+    // Check if user exists and token matches the one in DB
+    const user = await AUTH_MODEL.findOne({ email: (payload as any).email });
+
+    if (!user || user.refreshToken !== refreshToken) {
+      return res.status(403).json({ message: "Invalid refresh token" });
+    }
+
+    const newAccessToken = generateAccessToken({
+      username: user.username,
+      email: user.email,
+    });
+
+    res.cookie("accessToken", newAccessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 15 * 60 * 1000, // 15 minutes
+    });
+
+    return res.status(200).json({ success: true });
+  } catch (err) {
+    return res
+      .status(403)
+      .json({ message: "Invalid or expired refresh token" });
+  }
+};
+
+export { createNewUser, loginUser, refreshTokenController };
