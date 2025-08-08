@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 
-interface Auth {
+interface User {
   username: string;
   email: string;
   password?: string;
@@ -8,7 +8,7 @@ interface Auth {
   refreshToken: string;
 }
 
-const authSchema = new Schema<Auth>(
+const userSchema = new Schema<User>(
   {
     username: {
       type: String,
@@ -44,6 +44,6 @@ const authSchema = new Schema<Auth>(
   { timestamps: true }
 );
 
-const AUTH_MODEL = model<Auth>("user", authSchema);
+const USER_MODEL = model<User>("user", userSchema);
 
-export default AUTH_MODEL;
+export default USER_MODEL;

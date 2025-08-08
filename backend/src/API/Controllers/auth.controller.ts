@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
-import AUTH_MODEL from "../Models/auth.model";
+import AUTH_MODEL from "../Models/user.model";
 import { serverError } from "../../utils/serverError";
 import { generateAccessToken, generateRefreshToken } from "../../utils/jwt";
 
@@ -101,6 +101,21 @@ const loginUser = async (req: Request, res: Response) => {
     const payload = { username: user.username, email: user.email };
     const accessToken = generateAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
+
+    // save tokens in cookies
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 15 * 60 * 1000,
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: 24 * 60 * 60 * 1000,
+    });
 
     // update user refresh token
     user.refreshToken = refreshToken;

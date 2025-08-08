@@ -8,18 +8,34 @@ const loginUserAPI = async (body) => {
 const registerUserAPI = async (body) => {
   const route = "/auth/register";
   return fetchData(route, "POST", body);
-}
+};
+
+const getAccountUsernameAPI = async () => {
+  const route = "/account/username";
+  return fetchData(route, "GET");
+};
 
 const fetchData = async (route, method, body) => {
+  const options = {
+    method,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  };
+
+  if (body && method !== "GET") {
+    options.body = JSON.stringify(body);
+  }
+
   try {
-    const response = await fetch(`${API_BASE_URL}${route}`, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
+    const response = await fetch(`${API_BASE_URL}${route}`, options);
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const errorData = await response.json();
+      throw new Error(
+        errorData.message || `HTTP error! status: ${response.status}`
+      );
     }
 
     return await response.json();
@@ -29,4 +45,4 @@ const fetchData = async (route, method, body) => {
   }
 };
 
-export { loginUserAPI, registerUserAPI };
+export { loginUserAPI, registerUserAPI, getAccountUsernameAPI };

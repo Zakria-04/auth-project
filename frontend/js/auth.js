@@ -7,7 +7,6 @@ const refreshToken = localStorage.getItem("refreshToken");
 
 
 
-
 loginForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
@@ -20,8 +19,8 @@ loginForm.addEventListener("submit", async (event) => {
 
     if (response.success) {
       // Store access token
-      localStorage.setItem("accessToken", response.accessToken);
-      localStorage.setItem("refreshToken", response.refreshToken);
+      // localStorage.setItem("accessToken", response.accessToken);
+      // localStorage.setItem("refreshToken", response.refreshToken);
 
       // Redirect to dashboard
       window.location.href = "/frontend/dashboard.html";
