@@ -36,14 +36,14 @@ body {
 
 .auth-subtitle {
   color: #7f8c8d;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
   font-size: 14px;
 }
 
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
 }
 
 .form-group {
@@ -72,6 +72,13 @@ body {
   border-color: #3498db;
 }
 
+.hint-text {
+  color: #95a5a6;
+  font-size: 12px;
+  margin-top: 5px;
+  font-weight: 400;
+}
+
 .auth-button {
   background-color: #3498db;
   color: white;
@@ -82,15 +89,36 @@ body {
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.3s;
+  margin-top: 10px;
 }
 
 .auth-button:hover {
   background-color: #2980b9;
 }
 
+.auth-footer {
+  color: #7f8c8d;
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+.auth-footer a {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-footer a:hover {
+  text-decoration: underline;
+}
+
 /* Responsive Design */
 @media (max-width: 480px) {
   .auth-card {
     padding: 30px 20px;
+  }
+
+  .auth-form {
+    gap: 12px;
   }
 }

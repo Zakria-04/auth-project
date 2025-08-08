@@ -3,11 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/dashboard.css" />
     <title>Document</title>
   </head>
   <body>
-    <h1>Welcome to the Dashboard</h1>
-    <p id="username"></p>
+    <div class="dashboard-container">
+      <h1>Welcome to Your Dashboard</h1>
+      <div class="welcome-message" id="username"></div>
+
+      <div class="user-actions">
+        <button class="btn btn-logout" id="logoutBtn">Logout</button>
+      </div>
+    </div>
+
     <script type="module" src="./js/dashboard.js"></script>
   </body>
 </html>
